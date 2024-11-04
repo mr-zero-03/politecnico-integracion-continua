@@ -1,0 +1,33 @@
+# === SERVICES
+services:
+  # MySQL service
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: express_db
+      MYSQL_USER: express_user
+      MYSQL_PASSWORD: express_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # ExpressJS service
+  app:
+    build: .
+    container_name: express-app
+    environment:
+      DB_HOST: mysql
+      DB_USER: express_user
+      DB_PASSWORD: express_password
+      DB_NAME: express_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+
+# === VOLUMES
+volumes:
+  mysql_data:
