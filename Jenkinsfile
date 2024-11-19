@@ -1,12 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        PROJECT_PATH = 'C:\\Users\\danie\\OneDrive\\Escritorio\\programming\\university\\integracion-continua'
+    }
+
     stages {
-        stage('Build') {
-            steps {
-                echo 'Run build'
-            }
-        }
         stage('Code Analysis') {
             steps {
                 echo 'Run Code Analysis'
@@ -19,17 +18,26 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t express-app:latest .'
+                bat '''
+                    cd %PROJECT_PATH%
+                    docker build -t express-app:latest .
+                '''
             }
         }
-        stage('Build with Docker Compose'){
+        stage('Build Docker Compose') {
             steps {
-                sh 'docker-compose build'
+                bat '''
+                    cd %PROJECT_PATH%
+                    docker-compose build
+                '''
             }
         }
-        stage('Run docker images'){
+        stage('Run Docker Compose') {
             steps {
-                sh 'docker-compose up -d'
+                bat '''
+                    cd %PROJECT_PATH%
+                    docker-compose up -d
+                '''
             }
         }
     }
