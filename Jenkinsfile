@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PROJECT_PATH = 'C:\\Users\\danie\\OneDrive\\Escritorio\\programming\\university\\integracion-continua'
+        TEST_ENV_FILE = 'docker-compose-testing.yml'
     }
 
     stages {
@@ -37,6 +38,14 @@ pipeline {
                 bat '''
                     cd %PROJECT_PATH%
                     docker-compose up -d
+                '''
+            }
+        }
+        stage('Deploy to Testing Environment') {
+            steps {
+                bat '''
+                    cd %PROJECT_PATH%
+                    docker-compose -p express-app-testing -f %TEST_ENV_FILE% up -d
                 '''
             }
         }
